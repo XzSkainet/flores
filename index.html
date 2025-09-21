@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flores Amarillas</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Bitter&family=Dancing+Script:wght@400;700&display=swap");
+        *,
+        *::after,
+        *::before {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-bg: linear-gradient(to top, #010329, #000005);
+            --color-glass: linear-gradient(to left, #142544, #1a9092);
+            --color-water: linear-gradient(to left, #142544, #1b6d6e);
+        }
+
+        body {
+            background-image: var(--color-bg);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Estrellas de fondo */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Partículas doradas flotantes */
+        .floating-petals {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .floating-petal {
+            position: absolute;
+            width: 8px;
+            height: 12px;
+            background: linear-gradient(45deg, #ffeb3b, #ffc107);
+            border-radius: 50% 10% 50% 10%;
+            animation: fall-down 8s infinite linear;
+            opacity: 0.7;
+        }
+
+        @keyframes fall-down {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .flower {
+            position: relative;
+            z-index: 10;
+            /* Efecto de brillo sutil alrededor de las flores */
+            filter: drop-shadow(0 0 20px rgba(255, 235, 59, 0.3));
+        }
+
+        .flower__glass {
+            width: 20vmin;
+            height: 30vmin;
+            background-image: var(--color-glass);
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+            opacity: 0.8;
+            position: relative;
+            /* Efecto de cristal mejorado */
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            /* Reflejo en el cristal */
+            box-shadow:
+                    inset -5px 0 10px rgba(255, 255, 255, 0.1),
+                    0 0 20px rgba(20, 37, 68, 0.5);
+        }
+
+        .flower__glass::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-color: #182843;
+            width: 100%;
+            height: 2vmin;
+        }
+
+        .flower__glass::before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-image: var(--color-water);
+            width: 100%;
+            height: 15vmin;
+            /* Efecto de agua en movimiento */
+            animation: water-ripple 4s ease-in-out infinite;
+        }
+
+        @keyframes water-ripple {
+            0%, 100% {
+                transform: scaleY(1);
+                filter: brightness(1);
+            }
+            50% {
+                transform: scaleY(1.02);
+                filter: brightness(1.1);
+            }
+        }
+
+        .f-wrapper {
+            position: absolute;
+            left: 45%;
+            bottom: 2vmin;
+            /* Animación sutil de balanceo */
+            animation: gentle-sway 4s ease-in-out infinite;
+        }
+
+        @keyframes gentle-sway {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(1deg); }
+        }
+
+        .f-wrapper--2 {
+            left: 50%;
+            bottom: 5%;
+            transform-origin: 10% left;
+            transform: rotate(20deg);
+            animation: gentle-sway-2 5s ease-in-out infinite;
+        }
+
+        @keyframes gentle-sway-2 {
+            0%, 100% { transform: rotate(20deg); }
+            50% { transform: rotate(22deg); }
+        }
+
+        .f-wrapper--3 {
+            left: 30%;
+            bottom: 5%;
+            transform-origin: 10% left;
+            transform: rotate(-10deg);
+            animation: gentle-sway-3 6s ease-in-out infinite;
+        }
+
+        @keyframes gentle-sway-3 {
+            0%, 100% { transform: rotate(-10deg); }
+            50% { transform: rotate(-8deg); }
+        }
+
+        .f-wrapper--3 .flower__line {
+            height: 45vmin;
+            position: relative;
+        }
+
+        .f-wrapper--3 .flower__line::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 6vmin;
+            height: 6vmin;
+            transform: translate(-69%, -30%) rotate(-5deg);
+            border-radius: 10vmin 10vmin 0 0;
+            border: 2vmin solid #104d4e;
+            border-bottom: transparent;
+            border-left: transparent;
+        }
+
+        .f-wrapper--3 .flower__line::before {
+            content: "";
+            position: absolute;
+            left: -40%;
+            top: -1%;
+            width: 6vmin;
+            height: 2vmin;
+            transform-origin: right;
+            transform: translate(-100%, -80%) rotate(-20deg);
+            background-color: #104d4e;
+            border-radius: 2vmin;
+        }
+
+        .f-wrapper--3 .flower__line {
+            background-image: linear-gradient(to top, #142544, #104d4e);
+        }
+
+        .f-wrapper--2 .flower__line {
+            height: 45vmin;
+        }
+
+        .f-wrapper--2 .f {
+            transform: translateX(-50%) rotate(20deg);
+        }
+
+        .f-wrapper--3 .f {
+            transform: translate(-350%, -50%) rotate(-120deg);
+        }
+
+        .f-wrapper--2 .flower__leaf:not(:first-child) {
+            width: 3.8vmin;
+            height: 10vmin;
+            background-image: linear-gradient(to bottom, #ddee0e, #dbde1f, #92940f 99%);
+            /* Brillo en los pétalos */
+            box-shadow: 0 0 10px rgba(221, 238, 14, 0.5);
+        }
+
+        .f-wrapper--3 .flower__leaf:not(:first-child) {
+            width: 3.8vmin;
+            height: 10vmin;
+            background-image: linear-gradient(to bottom, #ddee0e, #dbde1f, #92940f 99%);
+            box-shadow: 0 0 12px rgba(221, 238, 14, 0.6);
+        }
+
+        .f-wrapper--3 .flower__leaf--1 {
+            width: 8vmin;
+            height: 10vmin;
+            bottom: 2vmin;
+            background-color: #665027;
+            /* Efecto de pulso en el centro */
+            animation: center-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes center-glow {
+            0%, 100% {
+                background-color: #665027;
+                box-shadow: 0 0 5px rgba(102, 80, 39, 0.3);
+            }
+            50% {
+                background-color: #8a6b35;
+                box-shadow: 0 0 15px rgba(138, 107, 53, 0.6);
+            }
+        }
+
+        .f-wrapper--2 .flower__leaf--1 {
+            width: 8vmin;
+            height: 10vmin;
+            bottom: 2vmin;
+            background-color: #d5d80c;
+            animation: center-glow-bright 3s ease-in-out infinite;
+        }
+
+        @keyframes center-glow-bright {
+            0%, 100% {
+                background-color: #d5d80c;
+                box-shadow: 0 0 8px rgba(213, 216, 12, 0.4);
+            }
+            50% {
+                background-color: #f0f314;
+                box-shadow: 0 0 20px rgba(240, 243, 20, 0.7);
+            }
+        }
+
+        .f-wrapper--2 .f .flower__leaf--8 {
+            width: 10vmin;
+            height: 9vmin;
+            bottom: 3vmin;
+            left: -30%;
+            transform: rotate(-50deg);
+            background-image: linear-gradient(to left bottom, #e0f209, #745d3a);
+        }
+
+        .f-wrapper--3 .f .flower__leaf--8 {
+            width: 10vmin;
+            height: 9vmin;
+            left: -10% !important;
+            background-image: linear-gradient(to left bottom, #e0f209, #745d3a);
+        }
+
+        .flower__line {
+            width: 2vmin;
+            height: 56vmin;
+            background-image: linear-gradient(to left top, #82fdff 20%, #142544, #104d4e);
+            border-radius: 4vmin;
+        }
+
+        .f {
+            position: absolute;
+            top: 1vmin;
+            left: 50%;
+            transform: translateX(-50%) rotate(-10deg);
+            width: 2vmin;
+            height: 2vmin;
+        }
+
+        .flower__leaf {
+            position: absolute;
+            left: 50%;
+            bottom: 2vmin;
+            transform: translateX(-50%);
+            width: 5vmin;
+            height: 14vmin;
+            background-image: linear-gradient(to bottom, #e0f209, #9b9c34, #745d3a 99%);
+            clip-path: ellipse(50% 50% at 50% 50%);
+            transform-origin: center bottom;
+            animation: open-flower 2s 1s backwards, petal-shimmer 4s ease-in-out infinite;
+        }
+
+        /* Nueva animación de brillo en pétalos */
+        @keyframes petal-shimmer {
+            0%, 100% {
+                filter: brightness(1);
+                box-shadow: 0 0 5px rgba(224, 242, 9, 0.3);
+            }
+            50% {
+                filter: brightness(1.2);
+                box-shadow: 0 0 15px rgba(224, 242, 9, 0.6);
+            }
+        }
+
+        .flower__leaf--1 {
+            width: 10vmin;
+            height: 12vmin;
+            bottom: 3vmin;
+            border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+            background-color: #e0f209;
+            background-image: none;
+            animation: open-flowe--middle 1.4s 1s backwards;
+        }
+
+        .flower__leaf--2 {
+            transform: translateX(-50%) rotate(-30deg);
+        }
+        .flower__leaf--3 {
+            transform: translateX(-50%) rotate(-50deg);
+        }
+        .flower__leaf--4 {
+            transform: translateX(-50%) rotate(-70deg);
+        }
+
+        .flower__leaf--5 {
+            transform: translateX(-50%) rotate(30deg);
+        }
+
+        .flower__leaf--6 {
+            transform: translateX(-50%) rotate(50deg);
+        }
+
+        .flower__leaf--7 {
+            transform: translateX(-50%) rotate(70deg);
+        }
+
+        .flower__leaf--8 {
+            width: 13vmin;
+            height: 11vmin;
+            bottom: 6vmin;
+            left: -30%;
+            border-radius: none;
+            clip-path: none;
+            border-radius: 10vmin 2vmin 10vmin 2vmin;
+            transform: rotate(-55deg);
+            background-image: linear-gradient(
+                    to left bottom,
+                    #e0f209,
+                    #9b9c34,
+                    #745d3a 98%
+            );
+        }
+
+        .flower__fall-down--yellow {
+            animation: flower-fall-down-yellow 8s 1.2s linear forwards;
+        }
+
+        .flower__fall-down--pink {
+            animation: flower-fall-down-pink 5s 1.2s linear forwards;
+        }
+
+        .flower__fall-down--purple {
+            bottom: 4vmin;
+            animation: flower-fall-down-purple 6s 1.2s linear forwards,
+            flower-falling 6s 7.2s linear infinite;
+        }
+
+        @keyframes open-flower {
+            0% {
+                transform: translateX(-50%) rotate(0);
+            }
+        }
+
+        @keyframes open-flowe--middle {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) scale(0);
+            }
+        }
+
+        @keyframes flower-fall-down-pink {
+            0% {
+                transform: rotate(-55deg);
+            }
+
+            50% {
+                transform: rotateX(-100deg);
+            }
+
+            100% {
+                transform: translate(2vmin, 28vmin);
+            }
+        }
+
+        @keyframes flower-fall-down-yellow {
+            0% {
+                transform: rotate(-55deg);
+            }
+
+            50% {
+                bottom: 3vmin;
+                transform: rotateX(-100deg);
+            }
+
+            100% {
+                transform: translate(2vmin, 70vmin) rotate(150deg);
+            }
+        }
+
+        @keyframes flower-fall-down-purple {
+            0% {
+                transform: rotate(-50deg);
+            }
+
+            25% {
+                bottom: 1vmin;
+                transform: rotateX(-100deg);
+                perspective: 0px;
+            }
+
+            50% {
+                perspective: 0px;
+                transform: translate(-30vmin, 2vmin) rotate(90deg);
+            }
+
+            75% {
+                perspective: 0px;
+                transform: translate(-34vmin, -2vmin);
+            }
+
+            100% {
+                transform-origin: center;
+                transform: translate(-34vmin, -2vmin) rotateY(-80deg) rotateX(35deg);
+            }
+        }
+
+        @keyframes flower-falling {
+            0%,
+            100% {
+                transform-origin: center;
+                transform: translate(-34vmin, -2vmin) rotateY(-80deg) rotateX(35deg);
+            }
+
+            25% {
+                transform-origin: center;
+                transform: translate(-34.4vmin, -2vmin) rotateY(-84deg) rotateX(35deg);
+            }
+
+            50% {
+                transform-origin: center;
+                transform: translate(-32vmin, -4.2vmin) rotateY(-80deg) rotateX(35deg);
+            }
+
+            75% {
+                transform-origin: center;
+                transform: translate(-36vmin, 1.1vmin) rotateY(-80deg) rotateX(35deg);
+            }
+        }
+
+        .frase {
+            font-family: "Bitter", serif;
+            color: white;
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: aparecer 2s linear forwards;
+            text-align: center;
+            z-index: 15;
+            padding: 20px;
+            /* Fondo con efecto de cristal */
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        .frase h1 {
+            font-size: clamp(1.2rem, 3.5vw, 2.5rem);
+            font-weight: 400;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            /* Efecto de texto dorado brillante */
+            background: linear-gradient(45deg, #ffeb3b, #ffd700, #fff59d);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: text-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes text-glow {
+            0%, 100% {
+                background-position: 0% 50%;
+                text-shadow: 0 0 10px rgba(255, 235, 59, 0.5);
+            }
+            50% {
+                background-position: 100% 50%;
+                text-shadow: 0 0 20px rgba(255, 235, 59, 0.8);
+            }
+        }
+
+        @keyframes aparecer {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* Efecto de corazones flotantes */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 193, 7, 0.6);
+            animation: float-heart 6s infinite linear;
+        }
+
+        @keyframes float-heart {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(90vh) scale(1);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Brillo de fondo sutil */
+        .background-glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 235, 59, 0.1), transparent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: bg-pulse 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes bg-pulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<!-- Brillo de fondo -->
+<div class="background-glow"></div>
+
+<!-- Estrellas -->
+<div class="stars"></div>
+
+<!-- Pétalos flotantes -->
+<div class="floating-petals"></div>
+
+<!-- Corazones flotantes -->
+<div class="hearts"></div>
+
+<div class="frase">
+    <h1>“Que estas flores amarillas llenen tu día de luz y alegría.”</h1>
+</div>
+
+<div class="flower">
+    <div class="f-wrapper">
+        <div class="flower__line"></div>
+        <div class="f">
+            <div class="flower__leaf flower__leaf--1"></div>
+            <div class="flower__leaf flower__leaf--2"></div>
+            <div class="flower__leaf flower__leaf--3"></div>
+            <div class="flower__leaf flower__leaf--4"></div>
+            <div class="flower__leaf flower__leaf--5"></div>
+            <div class="flower__leaf flower__leaf--6"></div>
+            <div class="flower__leaf flower__leaf--7"></div>
+            <div class="flower__leaf flower__leaf--8 flower__fall-down--yellow"></div>
+        </div>
+    </div>
+
+    <div class="f-wrapper f-wrapper--2">
+        <div class="flower__line"></div>
+        <div class="f">
+            <div class="flower__leaf flower__leaf--1"></div>
+            <div class="flower__leaf flower__leaf--2"></div>
+            <div class="flower__leaf flower__leaf--3"></div>
+            <div class="flower__leaf flower__leaf--4"></div>
+            <div class="flower__leaf flower__leaf--5"></div>
+            <div class="flower__leaf flower__leaf--6"></div>
+            <div class="flower__leaf flower__leaf--7"></div>
+            <div class="flower__leaf flower__leaf--8 flower__fall-down--pink"></div>
+        </div>
+    </div>
+
+    <div class="f-wrapper f-wrapper--3">
+        <div class="flower__line"></div>
+        <div class="f">
+            <div class="flower__leaf flower__leaf--1"></div>
+            <div class="flower__leaf flower__leaf--2"></div>
+            <div class="flower__leaf flower__leaf--3"></div>
+            <div class="flower__leaf flower__leaf--4"></div>
+            <div class="flower__leaf flower__leaf--5"></div>
+            <div class="flower__leaf flower__leaf--6"></div>
+            <div class="flower__leaf flower__leaf--7"></div>
+            <div class="flower__leaf flower__leaf--8 flower__fall-down--purple"></div>
+        </div>
+    </div>
+
+    <!-- EL VASO ESTÁ AQUÍ, MANTUVE TU CÓDIGO ORIGINAL -->
+    <div class="flower__glass"></div>
+</div>
+
+<script>
+    // Crear estrellas
+    function createStars() {
+        const starsContainer = document.querySelector('.stars');
+        for (let i = 0; i < 30; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 60 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+    }
+
+    // Crear pétalos flotantes
+    function createFloatingPetals() {
+        const petalsContainer = document.querySelector('.floating-petals');
+        for (let i = 0; i < 8; i++) {
+            const petal = document.createElement('div');
+            petal.className = 'floating-petal';
+            petal.style.left = Math.random() * 100 + '%';
+            petal.style.animationDelay = Math.random() * 8 + 's';
+            petal.style.animationDuration = (6 + Math.random() * 4) + 's';
+            petalsContainer.appendChild(petal);
+        }
+    }
+
+    // Crear corazones flotantes
+    function createHearts() {
+        const heartsContainer = document.querySelector('.hearts');
+        for (let i = 0; i < 5; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '💛';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 6 + 's';
+            heartsContainer.appendChild(heart);
+        }
+    }
+
+    // Inicializar todos los efectos
+    document.addEventListener('DOMContentLoaded', function() {
+        createStars();
+        createFloatingPetals();
+        createHearts();
+    });
+</script>
+</body>
+
+</html>
